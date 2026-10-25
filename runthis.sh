@@ -2,7 +2,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-URL="https://github.com/Ferrumec/ferum/releases/download/v0.1.0-za/ferum-v0.1.0-za-linux-x86_64.tar.gz"
+URL="https://github.com/Ferrumec/ferum/releases/download/main/ferum-main-linux-x86_64.tar.gz"
 ARCHIVE="ferum-v0.1.0-za-linux-x86_64.tar.gz"
 DEST_DIR="."
 
