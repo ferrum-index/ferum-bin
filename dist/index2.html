@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pilau &amp; Co. Recipes</title>
+<style>
+:root{--bg:#f1f5f4;--surface:#fff;--ink:#14262b;--muted:#5d7176;--line:#d5e0de;--brand:#0e6b6b;--brand-ink:#fff;--gold:#f2b632;--gold-ink:#3b2a00;--danger:#b3261e;--ok:#1b7a43;color-scheme:light}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1a1d;--surface:#142428;--ink:#e6efee;--muted:#90a8ac;--line:#244047;--brand:#3fb5b0;--brand-ink:#062123;--gold:#f2b632;--danger:#ff8a80;--ok:#6fd49a;color-scheme:dark}}
+*{box-sizing:border-box}
+html{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+h1,h2,h3{font-family:"Iowan Old Style",Palatino,"Palatino Linotype",Georgia,serif;line-height:1.15;margin:0}
+a{color:var(--brand)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header.top{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+header.top .wrap{display:flex;align-items:center;gap:20px;min-height:60px;flex-wrap:wrap}
+.logo{font-family:Georgia,serif;font-weight:700;font-size:1.3rem;text-decoration:none;color:var(--ink);margin-right:auto}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav a{padding:8px 12px;border-radius:8px;text-decoration:none;color:var(--muted);font-weight:500}
+nav a.on{color:var(--ink);background:var(--bg)}
+main{padding:28px 0 64px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--brand);background:var(--brand);color:var(--brand-ink);padding:9px 16px;border-radius:8px;font-weight:600;cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--brand)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:var(--gold-ink)}
+.btn.sm{padding:5px 10px;font-size:.9rem}
+.btn:disabled{opacity:.55;cursor:default}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:14px}
+.field label{font-weight:600;font-size:.92rem}
+input,select{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 12px;min-width:0}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.filters input[type=search]{flex:1 1 220px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:inherit}
+.card:hover{border-color:var(--brand)}
+.thumb{height:130px;display:grid;place-items:center;font:700 3rem Georgia,serif;color:rgba(255,255,255,.9);position:relative;overflow:hidden}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.card .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card h3{font-size:1.2rem}
+.meta{color:var(--muted);font-size:.9rem}
+.badge{display:inline-block;font-size:.78rem;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+.badge.premium{background:var(--gold);color:var(--gold-ink);border-color:var(--gold)}
+.pager{display:flex;gap:12px;align-items:center;justify-content:center;margin-top:28px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px}
+.narrow{max-width:420px;margin:24px auto}
+.err{color:var(--danger);font-weight:500;margin:0 0 12px}
+.note{color:var(--ok);font-weight:500;margin:0 0 12px}
+.empty{text-align:center;color:var(--muted);padding:48px 0}
+.recipe-head{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:24px}
+.recipe-head h1{font-size:2.4rem}
+.facts{display:flex;gap:22px;flex-wrap:wrap}
+.facts b{display:block;font-size:1.25rem}
+.two{display:grid;grid-template-columns:minmax(220px,1fr) 2fr;gap:28px;align-items:start}
+@media(max-width:700px){.two{grid-template-columns:1fr}.recipe-head h1{font-size:1.9rem}}
+ul.ing{list-style:none;padding:0;margin:12px 0 0}
+ul.ing li{padding:8px 0;border-bottom:1px solid var(--line)}
+ul.ing label{display:flex;gap:10px;cursor:pointer}
+ul.ing .done{text-decoration:line-through;color:var(--muted)}
+ol.steps{padding-left:0;list-style:none;counter-reset:s;margin:12px 0 0}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:34px 1fr;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+ol.steps li::before{content:counter(s);width:28px;height:28px;border-radius:50%;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center;font-weight:700;font-size:.9rem}
+.paywall{border:2px solid var(--gold);text-align:center;padding:36px 20px}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.price{font:700 2rem Georgia,serif}
+.row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.status{font-weight:700}
+.status.active{color:var(--ok)}.status.failed{color:var(--danger)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:99px;z-index:20;max-width:90vw}
+.spin{text-align:center;color:var(--muted);padding:40px}
+h2.sec{font-size:1.5rem;margin:30px 0 8px}
+.link{background:none;border:0;color:var(--brand);cursor:pointer;padding:0;text-decoration:underline}
+@media(prefers-reduced-motion:no-preference){.btn,.card{transition:border-color .15s,opacity .15s}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script>
+/* Deployment config. Override before this script runs with: window.RECIPE_CONFIG = {...}
+   namespaceId: the permission namespace UUID the deployment uses (BASE_PERMISSION_NAMESPACE). */
+const CONFIG = Object.assign({ apiBase: '', namespaceId: '' }, window.RECIPE_CONFIG || {});
+const { useState, useEffect, useCallback, useContext, createContext } = React;
+const html = htm.bind(React.createElement);
+
+/* ---------- API ---------- */
+const fallbackMsg = { 401: 'Please sign in to continue.', 403: 'You don’t have access to this.', 404: 'We couldn’t find that.', 409: 'That conflicts with something that already exists.', 422: 'Please check the details and try again.', 429: 'Too many attempts. Wait a moment and try again.' };
+async function api(path, { method = 'GET', body } = {}) {
+  let res;
+  try {
+    res = await fetch(CONFIG.apiBase + '/api' + path, { method, credentials: 'include', headers: body ? { 'Content-Type': 'application/json' } : {}, body: body ? JSON.stringify(body) : undefined });
+  } catch { const e = new Error('Can’t reach the server. Check your connection.'); e.status = 0; throw e; }
+  const text = await res.text(); let data = null;
+  if (text) { try { data = JSON.parse(text); } catch { data = text; } }
+  if (!res.ok) {
+    const m = (data && (data.error || data.message)) || (typeof data === 'string' && data) || fallbackMsg[res.status] || (res.status >= 500 ? 'Something went wrong on our side. Try again shortly.' : 'Request failed.');
+    const e = new Error(String(m).replace(/^(validation failed|conflict): /, '')); e.status = res.status; e.data = data; throw e;
+  }
+  return data;
+}
+const claim = async () => { if (CONFIG.namespaceId) { try { await api('/permissions/claim/' + CONFIG.namespaceId, { method: 'POST' }); } catch {} } };
+
+/* ---------- helpers ---------- */
+const fmtDate = d => d ? new Date(d).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+const fmtTime = d => new Date(d).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+const mins = m => m >= 60 ? `${Math.floor(m / 60)} h${m % 60 ? ' ' + (m % 60) + ' min' : ''}` : `${m} min`;
+const hue = s => [...(s || 'x')].reduce((a, c) => (a * 31 + c.charCodeAt(0)) % 360, 7);
+const pretty = s => String(s || '').replace(/[._]/g, ' ').replace(/^./, c => c.toUpperCase());
+const Ctx = createContext();
+const useApp = () => useContext(Ctx);
+function useHash() {
+  const [h, setH] = useState(location.hash.slice(1) || '/');
+  useEffect(() => { const f = () => { setH(location.hash.slice(1) || '/'); scrollTo(0, 0); }; addEventListener('hashchange', f); return () => removeEventListener('hashchange', f); }, []);
+  return h;
+}
+function useLoad(fn, deps) {
+  const [s, setS] = useState({ loading: true });
+  const { onAuthError } = useApp();
+  const run = useCallback(() => {
+    fn().then(data => setS({ data }), error => { if (error.status === 401) onAuthError(); setS({ error }); });
+  }, deps); // eslint-disable-line
+  useEffect(() => { setS(p => ({ ...p, loading: true })); run(); }, [run]);
+  return [s, run];
+}
+
+/* ---------- small components ---------- */
+const Field = ({ label, ...p }) => html`<div className="field"><label>${label}<input ...${p} style=${{ width: '100%', marginTop: 4 }}/></label></div>`;
+const Spinner = () => html`<div className="spin" role="status">Loading…</div>`;
+const SignInPrompt = () => html`<div className="empty"><p>Sign in to see this page.</p><a className="btn" href="#/login">Sign in</a></div>`;
+function Thumb({ r }) {
+  const [bad, setBad] = useState(false);
+  const h = hue(r.category || r.title);
+  return html`<div className="thumb" style=${{ background: `linear-gradient(135deg,hsl(${h} 45% 32%),hsl(${(h + 40) % 360} 50% 42%))` }} aria-hidden="true">
+    ${r.title[0].toUpperCase()}${r.photo_url && !bad && html`<img src=${r.photo_url} alt="" onError=${() => setBad(true)}/>`}</div>`;
+}
+
+/* ---------- pages ---------- */
+function Browse() {
+  const { user } = useApp();
+  const [q, setQ] = useState(''); const [term, setTerm] = useState('');
+  const [access, setAccess] = useState(''); const [sort, setSort] = useState('-created_at'); const [page, setPage] = useState(1);
+  const [category, setCategory] = useState('');
+  useEffect(() => { const t = setTimeout(() => { setTerm(q); setPage(1); }, 300); return () => clearTimeout(t); }, [q]);
+  const [s] = useLoad(() => {
+    const p = new URLSearchParams({ page, page_size: 12, sort });
+    if (term) p.set('search', term); if (access) p.set('access', access); if (category) p.set('category', category);
+    return api('/recipes?' + p);
+  }, [term, access, sort, page, category]);
+  const reset = f => v => { f(v); setPage(1); };
+  return html`<div>
+    <h1>What are we cooking?</h1>
+    ${!user && html`<p className="meta">Browse the collection, then <a href="#/login">sign in</a> to open full recipes.</p>`}
+    <div className="filters" role="search">
+      <input type="search" placeholder="Search recipes" aria-label="Search recipes" value=${q} onInput=${e => setQ(e.target.value)}/>
+      <input type="text" placeholder="Category" aria-label="Category" style=${{ width: 140 }} value=${category} onInput=${e => reset(setCategory)(e.target.value)}/>
+      <select aria-label="Access" value=${access} onChange=${e => reset(setAccess)(e.target.value)}><option value="">Free and premium</option><option value="free">Free</option><option value="premium">Premium</option></select>
+      <select aria-label="Sort" value=${sort} onChange=${e => reset(setSort)(e.target.value)}>
+        <option value="-created_at">Newest</option><option value="title">Title A–Z</option><option value="prep_minutes">Quickest prep</option><option value="cook_minutes">Quickest cook</option></select>
+    </div>
+    ${s.loading && !s.data ? html`<${Spinner}/>` : s.error ? html`<p className="err">${s.error.message}</p>` : !s.data.items.length ? html`<p className="empty">No recipes match. Try a different search or clear the filters.</p>` : html`
+      <div className="grid">${s.data.items.map(r => html`<a key=${r.id} className="card" href=${'#/recipe/' + r.id}>
+        <${Thumb} r=${r}/>
+        <div className="body"><div style=${{ display: 'flex', justifyContent: 'space-between', gap: 8 }}><span className="meta">${r.category || 'Recipe'}</span><span className=${'badge ' + r.access}>${r.access === 'premium' ? 'Premium' : 'Free'}</span></div>
+          <h3>${r.title}</h3><div className="meta">${r.summary}</div>
+          <div className="meta" style=${{ marginTop: 'auto', paddingTop: 6 }}>${mins(r.prep_minutes + r.cook_minutes)} total, serves ${r.servings}</div></div></a>`)}</div>
+      <div className="pager"><button className="btn ghost sm" disabled=${page <= 1} onClick=${() => setPage(page - 1)}>Previous</button>
+        <span className="meta">Page ${s.data.page} of ${s.data.total_pages || 1}</span>
+        <button className="btn ghost sm" disabled=${page >= s.data.total_pages} onClick=${() => setPage(page + 1)}>Next</button></div>`}
+  </div>`;
+}
+
+function Recipe({ id }) {
+  const [s] = useLoad(() => api('/recipes/' + id), [id]);
+  const [done, setDone] = useState({});
+  if (s.loading && !s.data) return html`<${Spinner}/>`;
+  if (s.error) {
+    const e = s.error;
+    if (e.data && e.data.code === 'subscription_required') return html`<div className="panel paywall"><h2>This one’s for premium members</h2>
+      <p className="meta" style=${{ margin: '10px 0 20px' }}>Subscribe to unlock every premium recipe.</p><a className="btn gold" href="#/plans">See plans</a></div>`;
+    if (e.status === 401) return html`<${SignInPrompt}/>`;
+    return html`<p className="empty">${e.message} <a href="#/">Back to recipes</a></p>`;
+  }
+  const r = s.data;
+  return html`<article>
+    <p><a href="#/">Back to recipes</a></p>
+    <div className="recipe-head"><div style=${{ display: 'flex', gap: 8 }}><span className="badge">${r.category || 'Recipe'}</span><span className=${'badge ' + r.access}>${r.access === 'premium' ? 'Premium' : 'Free'}</span></div>
+      <h1>${r.title}</h1><p style=${{ margin: 0, fontSize: '1.1rem' }}>${r.summary}</p>
+      <div className="facts"><div><b>${mins(r.prep_minutes)}</b><span className="meta">Prep</span></div><div><b>${mins(r.cook_minutes)}</b><span className="meta">Cook</span></div><div><b>${r.servings}</b><span className="meta">Servings</span></div></div></div>
+    <div className="two">
+      <section className="panel"><h2>Ingredients</h2><ul className="ing">${r.ingredients.map((i, n) => html`<li key=${n}><label>
+        <input type="checkbox" checked=${!!done[n]} onChange=${() => setDone({ ...done, [n]: !done[n] })}/>
+        <span className=${done[n] ? 'done' : ''}><b>${[i.quantity, i.unit].filter(Boolean).join(' ')}</b> ${i.name}${i.note && html` <span className="meta">(${i.note})</span>`}</span></label></li>`)}</ul></section>
+      <section><h2>Method</h2><ol className="steps">${r.steps.map((st, n) => html`<li key=${n}><div>${st.title && html`<b>${st.title}</b>`}<div>${st.instruction}</div></div></li>`)}</ol>
+        ${r.notes && html`<div className="panel" style=${{ marginTop: 20 }}><b>Cook’s notes</b><p style=${{ margin: '6px 0 0' }}>${r.notes}</p></div>`}</section>
+    </div></article>`;
+}
+
+function Plans() {
+  const { user, toast } = useApp();
+  const [plans] = useLoad(() => api('/subscriptions/plans'), []);
+  const [mine, reloadMine] = useLoad(() => user ? api('/subscriptions/mine') : Promise.resolve([]), [user && user.user_id]);
+  const [busy, setBusy] = useState('');
+  const live = ['pending_payment', 'granting', 'active', 'revoking'];
+  const pending = (mine.data || []).some(x => ['pending_payment', 'granting', 'revoking'].includes(x.status));
+  useEffect(() => { if (!pending) return; const t = setInterval(reloadMine, 4000); return () => clearInterval(t); }, [pending, reloadMine]);
+  const act = async (p, verb) => {
+    setBusy(p.id);
+    try { await api(`/subscriptions/plans/${p.id}/${verb}`, { method: 'POST' }); toast(verb === 'subscribe' ? 'Subscription started. Activating now…' : 'Cancelling your subscription…'); reloadMine(); }
+    catch (e) { toast(e.message); } finally { setBusy(''); }
+  };
+  const byPlan = id => (mine.data || []).find(x => x.plan_id === id && live.includes(x.status));
+  const names = {}; (plans.data || []).forEach(p => names[p.id] = p.name);
+  const label = { pending_payment: 'Waiting for payment', granting: 'Activating', active: 'Active', revoking: 'Ending', expired: 'Expired', cancelled: 'Cancelled', failed: 'Failed' };
+  return html`<div><h1>Premium plans</h1><p className="meta">Unlock every premium recipe.</p>
+    ${plans.loading ? html`<${Spinner}/>` : plans.error ? html`<p className="err">${plans.error.message}</p>` : !plans.data.length ? html`<p className="empty">No plans are available right now.</p>` : html`
+    <div className="plans" style=${{ marginTop: 20 }}>${plans.data.map(p => { const sub = byPlan(p.id); return html`<div className="panel" key=${p.id}>
+      <h3>${p.name}</h3><p className="meta">${p.description}</p><div className="price">${p.price === 0 ? 'Free' : p.price}</div>
+      <p className="meta">for ${p.duration_days} days</p>
+      ${!user ? html`<a className="btn" href="#/login">Sign in to subscribe</a>` : sub ? html`<p className=${'status ' + sub.status}>${label[sub.status]}${sub.expires_at && sub.status === 'active' ? ' until ' + fmtDate(sub.expires_at) : ''}</p>
+        ${sub.status === 'active' && html`<button className="btn ghost sm" disabled=${busy === p.id} onClick=${() => act(p, 'unsubscribe')}>Cancel subscription</button>`}`
+        : html`<button className="btn gold" disabled=${busy === p.id} onClick=${() => act(p, 'subscribe')}>Subscribe</button>`}</div>`; })}</div>`}
+    ${user && (mine.data || []).length > 0 && html`<h2 className="sec">Your subscriptions</h2><div className="panel">${mine.data.map(x => html`<div className="row" key=${x.id}>
+      <div><b>${names[x.plan_id] || 'Plan'}</b><div className="meta">Started ${fmtDate(x.created)}${x.failure_reason ? ' · ' + pretty(x.failure_reason) : ''}</div></div>
+      <span className=${'status ' + x.status}>${label[x.status] || x.status}</span></div>`)}</div>`}
+  </div>`;
+}
+
+function Notifications() {
+  const { user } = useApp();
+  const [page, setPage] = useState(1);
+  const [s] = useLoad(() => user ? api('/notifications/in-app?page=' + page + '&page_size=20') : Promise.resolve(null), [page, user && user.user_id]);
+  if (!user) return html`<${SignInPrompt}/>`;
+  if (s.loading && !s.data) return html`<${Spinner}/>`;
+  if (s.error) return html`<p className="err">${s.error.message}</p>`;
+  const items = s.data.items, pages = Math.max(1, Math.ceil(s.data.count / 20));
+  return html`<div><h1>Notifications</h1>
+    ${!items.length ? html`<p className="empty">You’re all caught up.</p>` : html`<div className="panel" style=${{ marginTop: 16 }}>${items.map(n => html`<div className="row" key=${n.id}>
+      <b>${pretty(n.subject)}</b><span className="meta">${fmtTime(n.created_at)}</span></div>`)}</div>
+    <div className="pager"><button className="btn ghost sm" disabled=${page <= 1} onClick=${() => setPage(page - 1)}>Previous</button><span className="meta">Page ${page} of ${pages}</span>
+      <button className="btn ghost sm" disabled=${page >= pages} onClick=${() => setPage(page + 1)}>Next</button></div>`}</div>`;
+}
+
+function Account() {
+  const { user, signOut, toast } = useApp();
+  const [sessions, reload] = useLoad(() => user ? api('/auth/me/sessions') : Promise.resolve([]), [user && user.user_id]);
+  const [f, setF] = useState({ current_password: '', new_password: '' }); const [msg, setMsg] = useState({});
+  if (!user) return html`<${SignInPrompt}/>`;
+  const change = async e => {
+    e.preventDefault(); setMsg({});
+    try { await api('/auth/me/change_password', { method: 'POST', body: f }); setMsg({ ok: 'Password changed. Other devices were signed out.' }); setF({ current_password: '', new_password: '' }); reload(); }
+    catch (er) { setMsg({ err: er.status === 401 ? 'Your current password is incorrect.' : er.status === 400 ? 'Choose a stronger password: longer, with unusual words.' : er.message }); }
+  };
+  const revoke = async id => { try { await api('/auth/me/delete_session/' + id, { method: 'DELETE' }); toast('Device signed out.'); reload(); } catch (e) { toast(e.message); } };
+  return html`<div style=${{ maxWidth: 640 }}><h1>Account</h1>
+    <div className="panel" style=${{ margin: '16px 0' }}><b>${user.username}</b><div className="meta">${user.email}</div><button className="btn ghost sm" style=${{ marginTop: 12 }} onClick=${signOut}>Sign out</button></div>
+    <h2 className="sec">Change password</h2>
+    <form className="panel" onSubmit=${change}>${msg.err && html`<p className="err">${msg.err}</p>`}${msg.ok && html`<p className="note">${msg.ok}</p>`}
+      <${Field} label="Current password" type="password" required autoComplete="current-password" value=${f.current_password} onInput=${e => setF({ ...f, current_password: e.target.value })}/>
+      <${Field} label="New password" type="password" required minLength="8" autoComplete="new-password" value=${f.new_password} onInput=${e => setF({ ...f, new_password: e.target.value })}/>
+      <button className="btn">Change password</button></form>
+    <h2 className="sec">Signed-in devices</h2>
+    <div className="panel">${sessions.loading ? html`<${Spinner}/>` : (sessions.data || []).map(x => html`<div className="row" key=${x.id}>
+      <div><b>${x.ip_address ? x.ip_address.replace(/\/\d+$/, '') : 'Unknown location'}</b><div className="meta">Signed in ${fmtTime(x.created_at)}</div></div>
+      <button className="btn ghost sm" onClick=${() => revoke(x.id)}>Sign out</button></div>`)}</div></div>`;
+}
+
+function Auth({ mode }) {
+  const { signIn } = useApp();
+  const [f, setF] = useState({ identifier: '', username: '', email: '', password: '', token: '' });
+  const [err, setErr] = useState(''); const [ok, setOk] = useState(''); const [busy, setBusy] = useState(false);
+  const set = k => e => setF({ ...f, [k]: e.target.value });
+  const submit = async e => {
+    e.preventDefault(); setErr(''); setOk(''); setBusy(true);
+    try {
+      if (mode === 'login') {
+        const id = f.identifier.trim();
+        await api('/auth/auth/login/' + (id.includes('@') ? 'email' : 'username'), { method: 'POST', body: { identifier: id, password: f.password } });
+        await signIn(); location.hash = '#/';
+      } else if (mode === 'register') {
+        await api('/auth/auth/register', { method: 'POST', body: { username: f.username.trim(), email: f.email.trim(), password: f.password } });
+        await api('/auth/auth/login/username', { method: 'POST', body: { identifier: f.username.trim(), password: f.password } });
+        await signIn(); location.hash = '#/';
+      } else if (mode === 'forgot') {
+        await api('/auth/auth/request_password_reset', { method: 'POST', body: { email: f.email.trim() } });
+        setOk('If that account exists, we’ve sent a reset code. Enter it below with a new password.'); setF({ ...f, step: 2 });
+      } else {
+        await api('/auth/auth/confirm_password_reset', { method: 'POST', body: { token: f.token.trim(), new_password: f.password } });
+        setOk('Password updated. You can sign in now.');
+      }
+    } catch (er) {
+      setErr(mode === 'login' && er.status === 401 ? 'That username or password isn’t right.'
+        : mode === 'register' && er.status === 409 ? 'An account with that username or email already exists.'
+        : mode === 'register' && er.status === 400 ? 'Use a 3–30 character username, a valid email and a stronger password (longer, with less predictable words).'
+        : mode === 'reset' && er.status === 401 ? 'That reset code is invalid or expired.' : er.message);
+    } finally { setBusy(false); }
+  };
+  const titles = { login: 'Welcome back', register: 'Create your account', forgot: 'Reset your password', reset: 'Choose a new password' };
+  return html`<form className="panel narrow" onSubmit=${submit}><h1 style=${{ marginBottom: 16 }}>${titles[mode]}</h1>
+    ${err && html`<p className="err" role="alert">${err}</p>`}${ok && html`<p className="note">${ok}</p>`}
+    ${mode === 'login' && html`<${Field} label="Username or email" required autoComplete="username" value=${f.identifier} onInput=${set('identifier')}/>`}
+    ${mode === 'register' && html`<${Field} label="Username" required minLength="3" maxLength="30" autoComplete="username" value=${f.username} onInput=${set('username')}/>`}
+    ${(mode === 'register' || mode === 'forgot') && html`<${Field} label="Email" type="email" required autoComplete="email" value=${f.email} onInput=${set('email')}/>`}
+    ${mode === 'reset' && html`<${Field} label="Reset code" required value=${f.token} onInput=${set('token')}/>`}
+    ${mode !== 'forgot' && html`<${Field} label=${mode === 'reset' ? 'New password' : 'Password'} type="password" required minLength=${mode === 'login' ? 1 : 8} autoComplete=${mode === 'login' ? 'current-password' : 'new-password'} value=${f.password} onInput=${set('password')}/>`}
+    <button className="btn" style=${{ width: '100%' }} disabled=${busy}>${busy ? 'Please wait…' : { login: 'Sign in', register: 'Create account', forgot: 'Send reset code', reset: 'Update password' }[mode]}</button>
+    <p className="meta" style=${{ marginTop: 16, textAlign: 'center' }}>
+      ${mode === 'login' && html`New here? <a href="#/register">Create an account</a> · <a href="#/forgot">Forgot password?</a>`}
+      ${mode === 'register' && html`Already have an account? <a href="#/login">Sign in</a>`}
+      ${mode === 'forgot' && html`Have a code? <a href="#/reset">Enter it</a>`}
+      ${mode === 'reset' && html`<a href="#/login">Back to sign in</a>`}</p></form>`;
+}
+
+/* ---------- shell ---------- */
+function App() {
+  const route = useHash();
+  const [user, setUser] = useState(undefined);
+  const [toastMsg, setToastMsg] = useState('');
+  const toast = useCallback(m => { setToastMsg(m); setTimeout(() => setToastMsg(''), 3500); }, []);
+  const signIn = useCallback(async () => {
+    await claim();
+    try { const r = await api('/auth/me/account'); setUser(r.data); } catch { setUser(null); }
+  }, []);
+  const signOut = async () => { try { await api('/auth/me/logout', { method: 'POST' }); } catch {} setUser(null); location.hash = '#/'; };
+  const onAuthError = useCallback(() => { setUser(u => { if (u) toast('Your session ended. Please sign in again.'); return null; }); }, []);
+  useEffect(() => { api('/auth/me/account').then(r => { setUser(r.data); claim(); }, () => setUser(null)); }, []);
+  const ctx = { user, signIn, signOut, toast, onAuthError };
+  const [, a, b] = route.split('/');
+  const authModes = ['login', 'register', 'forgot', 'reset'];
+  let page;
+  if (user === undefined) page = html`<${Spinner}/>`;
+  else if (a === 'recipe' && b) page = html`<${Recipe} key=${b} id=${b}/>`;
+  else if (a === 'plans') page = html`<${Plans}/>`;
+  else if (a === 'notifications') page = html`<${Notifications}/>`;
+  else if (a === 'account') page = html`<${Account}/>`;
+  else if (authModes.includes(a)) page = html`<${Auth} key=${a} mode=${a}/>`;
+  else page = html`<${Browse}/>`;
+  const nav = (h, t) => html`<a href=${h} className=${(route === h.slice(1) || (h === '#/' && route === '/')) ? 'on' : ''}>${t}</a>`;
+  return html`<${Ctx.Provider} value=${ctx}>
+    <header className="top"><div className="wrap"><a className="logo" href="#/">Pilau &amp; Co.</a>
+      <nav aria-label="Main">${nav('#/', 'Recipes')}${nav('#/plans', 'Premium')}${user && nav('#/notifications', 'Notifications')}${user ? nav('#/account', user.username) : nav('#/login', 'Sign in')}</nav></div></header>
+    <main><div className="wrap">${page}</div></main>
+    ${toastMsg && html`<div className="toast" role="status">${toastMsg}</div>`}<//>`;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(html`<${App}/>`);
+</script>
+</body>
+</html>
