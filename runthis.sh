@@ -1,9 +1,9 @@
 
 #!/usr/bin/env bash
 set -euo pipefail
-
-URL="https://github.com/Ferrumec/ferum/releases/download/v26.11.8/ferum-v26.11.8-c-linux-x86_64.tar.gz"
-ARCHIVE="ferum-v0.1.0-za-linux-x86_64.tar.gz"
+VERSION="v26.11.8-d"
+URL="https://github.com/Ferrumec/ferum/releases/download/$VERSION/ferum-$VERSION-linux-x86_64.tar.gz"
+ARCHIVE="ferum-$VERSION-linux-x86_64.tar.gz"
 DEST_DIR="."
 
 # Download the archive
